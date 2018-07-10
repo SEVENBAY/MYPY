@@ -1,7 +1,7 @@
 import socket
 
 
-host = ('127.0.0.1',9999)
+host = ('127.0.0.1', 9999)
 s = socket.socket()
 s.connect(host)
 while True:
@@ -9,8 +9,9 @@ while True:
     if len(info) == 0:
         continue
     if info == 'q':
+        s.sendall(bytes(info.encode()))
         break
     s.sendall(bytes(info.encode()))
     data = s.recv(1024)
-    print(data.decode())
+    print("send-->", data.decode())
 s.close()
