@@ -33,7 +33,7 @@ def half_find(array, data):
 
 # 冒泡排序算法
 @use_time
-def bubble(array):
+def bubble_sort(array):
     for i in range(len(array)-1):
         for j in range(len(array)-i-1):
             if array[j] > array[j+1]:
@@ -58,7 +58,7 @@ def bubble_better(array):
 
 # 选择排序算法
 @use_time
-def choice(array):
+def choice_sort(array):
     for i in range(len(array)-1):
         min_index = i
         for j in range(i+1, len(array)):
@@ -109,7 +109,7 @@ def quick_sort(array):
 
 
 # 堆排序算法
-# 构建堆的过程
+# 构建堆的调整过程
 def shift(array, low, high):
     tmp = array[low]
     i = low
@@ -138,3 +138,60 @@ def heap_sort(array):
         shift(array, 0, n-i-2)
     return array
 
+
+# 归并排序算法
+# 一次归并排序
+def merge(array, low, mid, high):
+    tmp_list = []
+    i = low
+    j = mid + 1
+    while i <= mid and j <= high:
+        if array[i] < array[j]:
+            tmp_list.append(array[i])
+            i += 1
+        elif array[i] > array[j]:
+            tmp_list.append(array[j])
+            j += 1
+        else:
+            tmp_list.append(array[i])
+            i += 1
+    if j <= high:
+        for num in array[j:high+1]:
+            tmp_list.append(num)
+    if i <= mid:
+        for num in array[i:mid+1]:
+            tmp_list.append(num)
+    array[low:high+1] = tmp_list
+    return array
+
+
+# 应用递归实现归并排序
+def _merge_sort(array, low, high):
+    if low < high:
+        mid = (low+high) // 2
+        _merge_sort(array, low, mid)
+        _merge_sort(array, mid+1, high)
+        merge(array, low, mid, high)
+    return array
+
+
+# 装饰器不应该直接装饰递归函数，应该再次封装一层
+@use_time
+def merge_sort(array):
+    return _merge_sort(array, 0, len(array)-1)
+
+
+# 希尔排序算法
+@use_time
+def shell_sort(array):
+    gap = len(array) // 2
+    while gap >= 1:
+        for i in range(gap, len(array)):
+            tmp = array[i]
+            j = i - gap
+            while j >= 0 and array[j] > tmp:
+                array[j+gap] = array[j]
+                j -= gap
+            array[j+gap] = tmp
+        gap = gap / 2
+    return array
